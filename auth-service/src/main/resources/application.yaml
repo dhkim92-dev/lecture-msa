@@ -1,0 +1,33 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:auth-db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  hibernate:
+    ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:/db/migration
+    username: sa
+    password:
+
+jwt:
+  issuer: "https://identification.dohoon-kim.kr"
+  access-token:
+    secret: access-token-secret
+    expiration: 600000
+  refresh-token:
+    secret: refresh-token-secret
+    expiration: 86400000
+
+logging:
+  level:
+    root: DEBUG
