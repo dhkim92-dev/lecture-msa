@@ -91,13 +91,23 @@ open class CommonExceptionHandlerAdvice {
         return makeResponseEntity(e.status, ErrorResponse.Companion.of(e))
     }
 
+    @ExceptionHandler(Exception::class)
+    fun handlerException(e: Exception): ResponseEntity<ApiResponse<ErrorResponse>> {
+        logger.error("Exception occured: ${e.message}")
+        val response = ErrorResponse(
+            code = "INTERNAL_SERVER_ERROR",
+            message = e.message
+        )
+        return makeResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, response)
+    }
+
     private fun makeResponseEntity(status: HttpStatus, errorResponse: ErrorResponse)
     : ResponseEntity<ApiResponse<ErrorResponse>> {
         return ResponseEntity.status(status).body(
             ApiResponse<ErrorResponse>(
                 traceId = MDC.get("traceId")?:null,
                 status = status.value(),
-                data = errorResponse,
+                payload = errorResponse,
                 message = errorResponse.message?:""
             )
         )
