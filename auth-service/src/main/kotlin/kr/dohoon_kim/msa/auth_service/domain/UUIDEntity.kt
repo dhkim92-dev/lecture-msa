@@ -1,25 +1,26 @@
 package kr.dohoon_kim.msa.auth_service.domain
 
-import jakarta.persistence.EntityListeners
+import jakarta.persistence.*
 import jakarta.persistence.Id
-import jakarta.persistence.MappedSuperclass
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.util.UUID
 
 @MappedSuperclass
 @EntityListeners(value = [AuditingEntityListener::class])
-abstract class BaseEntity<T>(
+abstract class UUIDEntity(
     @Id
-    private val id: T? = null
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private val id: UUID? = null
 ): BaseTimeEntity() {
 
-    val identifier: T
+    val identifier: UUID
         get() = id!!
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as BaseEntity<*>
+        other as UUIDEntity
 
         return id == other.id
     }

@@ -3,8 +3,7 @@ package kr.dohoon_kim.msa.auth_service.interfaces
 import jakarta.validation.Valid
 import kr.dohoon_kim.lectures.msa.common.responses.Envelop
 import kr.dohoon_kim.msa.auth_service.interfaces.dto.AuthenticationResponse
-import kr.dohoon_kim.msa.auth_service.interfaces.dto.LoginRequest
-import kr.dohoon_kim.msa.auth_service.interfaces.dto.NicknamePasswordLoginRequest
+import kr.dohoon_kim.msa.auth_service.interfaces.dto.EmailPasswordLoginRequest
 import kr.dohoon_kim.msa.auth_service.interfaces.dto.RefreshTokenRequest
 import kr.dohoon_kim.msa.auth_service.service.AuthenticationService
 import org.springframework.http.HttpStatus
@@ -21,8 +20,8 @@ class AuthenticationController(
 
     @PostMapping("/nickname-password")
     @Envelop(status = HttpStatus.CREATED, message = "로그인 성공")
-    fun login(@RequestBody @Valid request: NicknamePasswordLoginRequest): AuthenticationResponse {
-        return AuthenticationResponse.of(authenticationService.nicknamePasswordAuthentication(request.nickname, request.password))
+    fun login(@RequestBody @Valid request: EmailPasswordLoginRequest): AuthenticationResponse {
+        return AuthenticationResponse.of(authenticationService.emailPasswordAuthentication(request.email, request.password))
     }
 
     @PostMapping("/jwt/refresh-token")

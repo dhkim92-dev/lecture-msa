@@ -17,7 +17,7 @@ class MemberAUthenticationInfoTest : AnnotationSpec() {
         )
 
         member.identifier shouldBe memberId
-        member.nickname shouldBe "test"
+        member.email shouldBe "test"
         member.password shouldBe "test"
     }
 
@@ -33,7 +33,7 @@ class MemberAUthenticationInfoTest : AnnotationSpec() {
 
         member.changeNickname("new")
 
-        member.nickname shouldBe "new"
+        member.email shouldBe "new"
     }
 
     @Test

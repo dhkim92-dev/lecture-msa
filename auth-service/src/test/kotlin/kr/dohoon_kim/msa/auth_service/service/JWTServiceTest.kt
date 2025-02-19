@@ -5,7 +5,6 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import kr.dohoon_kim.msa.auth_service.configs.JwtConfiguration
-import kr.dohoon_kim.msa.auth_service.domain.MemberId
 import org.junit.jupiter.api.Test
 import java.util.*
 

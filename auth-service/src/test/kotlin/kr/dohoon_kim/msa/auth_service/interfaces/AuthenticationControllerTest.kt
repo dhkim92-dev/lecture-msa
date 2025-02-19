@@ -7,11 +7,10 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import kr.dohoon_kim.msa.auth_service.interfaces.dto.NicknamePasswordLoginRequest
+import kr.dohoon_kim.msa.auth_service.interfaces.dto.EmailPasswordLoginRequest
 import kr.dohoon_kim.msa.auth_service.interfaces.dto.RefreshTokenRequest
 import kr.dohoon_kim.msa.auth_service.service.AuthenticationService
 import kr.dohoon_kim.msa.auth_service.service.dto.AuthenticationSuccess
-import kotlin.math.exp
 
 class AuthenticationControllerTest: AnnotationSpec() {
 
@@ -26,7 +25,7 @@ class AuthenticationControllerTest: AnnotationSpec() {
     @Test
     fun `닉네임 패스워드 로그인 요청`() {
         // Given 로그인 요청이 주어진다.
-        val request = NicknamePasswordLoginRequest("nickname", "password")
+        val request = EmailPasswordLoginRequest("nickname", "password")
         val expected = AuthenticationSuccess(
             type = "Bearer",
             accessToken = "accessToken",
@@ -34,7 +33,7 @@ class AuthenticationControllerTest: AnnotationSpec() {
         )
 
         // When 로그인이 성공하면
-        every { authenticationService.nicknamePasswordAuthentication(any(), any()) } returns expected
+        every { authenticationService.emailPasswordAuthentication(any(), any()) } returns expected
 
         shouldNotThrowAny {
             val response = authenticationController.login(request)

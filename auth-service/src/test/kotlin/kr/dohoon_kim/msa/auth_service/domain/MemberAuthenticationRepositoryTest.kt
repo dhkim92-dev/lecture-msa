@@ -38,7 +38,7 @@ class MemberAuthenticationRepositoryTest(
         member shouldNotBe null
         member as MemberAuthenticationInfo
         member.identifier shouldBe memberId
-        member.nickname shouldBe "test"
+        member.email shouldBe "test"
         logger.debug("password : ${member.password}")
         member.password shouldBe "test"
     }
@@ -54,7 +54,7 @@ class MemberAuthenticationRepositoryTest(
         val savedMember = memberAuthenticationRepository.save(newMember)
         savedMember shouldNotBe null
         savedMember.identifier shouldBe newMember.identifier
-        savedMember.nickname shouldBe newMember.nickname
+        savedMember.email shouldBe newMember.email
         savedMember.password shouldBe newMember.password
     }
 
@@ -68,7 +68,7 @@ class MemberAuthenticationRepositoryTest(
         val updatedMember = memberAuthenticationRepository.save(member)
         updatedMember shouldNotBe null
         updatedMember.identifier shouldBe memberId
-        updatedMember.nickname shouldBe "new"
+        updatedMember.email shouldBe "new"
         updatedMember.password shouldBe "new"
     }
 

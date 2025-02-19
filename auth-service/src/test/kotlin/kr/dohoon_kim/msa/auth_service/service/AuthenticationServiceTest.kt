@@ -8,11 +8,9 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import kr.dohoon_kim.lectures.msa.common.responses.errors.NotFoundException
 import kr.dohoon_kim.lectures.msa.common.responses.errors.UnauthorizedException
 import kr.dohoon_kim.msa.auth_service.domain.MemberAuthenticationInfo
 import kr.dohoon_kim.msa.auth_service.domain.MemberAuthenticationInfoRepository
-import kr.dohoon_kim.msa.auth_service.domain.MemberId
 import kr.dohoon_kim.msa.auth_service.helper.JwtHelper
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.UUID
@@ -40,10 +38,10 @@ class AuthenticationServiceTest: AnnotationSpec() {
     @Test
     fun `사용자 닉네임과 비밀번호를 통한 인증`() {
         // given
-        every { memberAuthenticationInfoRepository.findByNickname("test") } returns defaultMember
+        every { memberAuthenticationInfoRepository.findByEmail("test") } returns defaultMember
         every { passwordEncoder.matches("test", "test") } returns true
         // when
-        val result = authenticationService.nicknamePasswordAuthentication("test", "test")
+        val result = authenticationService.emailPasswordAuthentication("test", "test")
 
         // then
         result.accessToken shouldNotBe null
@@ -58,20 +56,20 @@ class AuthenticationServiceTest: AnnotationSpec() {
 
     @Test
     fun`회원이 존재하지 않는 경우 UnauthorizedException 발생`() {
-        every { memberAuthenticationInfoRepository.findByNickname("test") } returns null
+        every { memberAuthenticationInfoRepository.findByEmail("test") } returns null
 
         shouldThrow<UnauthorizedException> {
-            authenticationService.nicknamePasswordAuthentication("test", "test")
+            authenticationService.emailPasswordAuthentication("test", "test")
         }
     }
 
     @Test
     fun `회원이 존재하지만 비밀번호가 일치하지 않는 경우 UnauthorizedException 발생`() {
-        every { memberAuthenticationInfoRepository.findByNickname("test") } returns defaultMember
+        every { memberAuthenticationInfoRepository.findByEmail("test") } returns defaultMember
         every { passwordEncoder.matches(any(), any()) } returns false
 
         shouldThrow<UnauthorizedException> {
-            authenticationService.nicknamePasswordAuthentication("test", "wrong")
+            authenticationService.emailPasswordAuthentication("test", "wrong")
         }
     }
 

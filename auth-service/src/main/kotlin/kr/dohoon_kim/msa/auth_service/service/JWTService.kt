@@ -4,10 +4,12 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import kr.dohoon_kim.msa.auth_service.configs.JwtConfiguration
-import kr.dohoon_kim.msa.auth_service.domain.MemberId
+import kr.dohoon_kim.msa.auth_service.domain.ID
+import kr.dohoon_kim.msa.auth_service.domain.MemberAuthenticationInfo
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.Date
+import java.util.UUID
 
 @Service
 class JWTService(private val jwtConfiguration: JwtConfiguration) {
@@ -16,24 +18,24 @@ class JWTService(private val jwtConfiguration: JwtConfiguration) {
 
     private val refreshTokenAlgorithm = Algorithm.HMAC256(jwtConfiguration.refreshTokenSecret)
 
-    fun createAccessToken(memberId: MemberId): String {
+    fun createAccessToken(memberId: ID<MemberAuthenticationInfo, UUID>): String {
         val now = Instant.now()
         val expiration = now.plusMillis(jwtConfiguration.accessTokenExpiration)
 
         return JWT.create()
             .withIssuer(jwtConfiguration.issuer)
-            .withSubject(memberId.id.toString())
+            .withSubject(memberId.value.toString())
             .withExpiresAt(Date.from(expiration))
             .sign(accessTokenAlgorithm)
     }
 
-    fun createRefreshToken(memberId: MemberId): String {
+    fun createRefreshToken(memberId: ID<MemberAuthenticationInfo, UUID>): String {
         val now = Instant.now()
         val expiration = now.plusMillis(jwtConfiguration.refreshTokenExpiration)
 
         return JWT.create()
             .withIssuer(jwtConfiguration.issuer)
-            .withSubject(memberId.id.toString())
+            .withSubject(memberId.value.toString())
             .withExpiresAt(Date.from(expiration))
             .sign(refreshTokenAlgorithm)
     }

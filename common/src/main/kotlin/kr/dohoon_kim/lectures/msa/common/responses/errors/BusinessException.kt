@@ -5,9 +5,9 @@ import kr.dohoon_kim.lectures.msa.common.responses.ErrorCode
 
 
 open class BusinessException(
-    override val status: HttpStatus,
-    override val code: String,
-    override val message: String
+    val status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
+    override val code: String = "",
+    override val message: String = ""
 ) : RuntimeException(message), ErrorCode {
 
 }

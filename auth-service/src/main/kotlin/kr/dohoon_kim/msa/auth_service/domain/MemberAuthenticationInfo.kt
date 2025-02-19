@@ -1,30 +1,31 @@
 package kr.dohoon_kim.msa.auth_service.domain
 
-import com.fasterxml.jackson.databind.ser.Serializers.Base
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import kr.dohoon_kim.lectures.msa.common.responses.errors.UnauthorizedException
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.UUID
 
 @Entity
 class MemberAuthenticationInfo(
-    id: MemberId? = null,
-    nickname: String = "",
+    id: UUID? = null,
+    email: String = "",
     password: String = ""
-): BaseEntity<MemberId>(id) {
+): UUIDEntity(id) {
 
-    @Column
-    var nickname: String = nickname
+    @Column(unique = true, length = 64)
+    var email: String = email
         private set
 
-    @Column
+    @Column(length = 255)
     var password: String = password
         private set
 
-    fun changeNickname(nickname: String) {
-        this.nickname = nickname
-    }
+    fun changePassword(current: String, newPassword: String, passwordEncoder: PasswordEncoder) {
+        if(!passwordEncoder.matches(current, password)) {
+            throw UnauthorizedException()
+        }
 
-    fun changePassword(password: String) {
         this.password = password
     }
 }
